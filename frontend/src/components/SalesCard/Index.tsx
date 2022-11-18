@@ -17,10 +17,16 @@ function SalesCard() {
     const [sales, setSales] = useState<Sale[]>([]);
 
     useEffect(() => {
-        axios.get(`${BASE_URL}/sales`).then(response => {
+
+        const dmin = minDate.toISOString().slice(0, 10);
+        const dmax = maxDate.toISOString().slice(0, 10);
+
+        console.log(dmin);
+
+        axios.get(`${BASE_URL}/sales?minDate=${dmin}&maxDate=${dmax}`).then(response => {
             setSales(response.data.content);
-        })
-    }, []);
+        });
+    }, [minDate, maxDate]);
     return (
         <>
             <div className="vendasmeta-card">
@@ -59,15 +65,15 @@ function SalesCard() {
                         </thead>
 
                         <tbody>
-                            {sales.map(item => {
+                            {sales.map(sale => {
                                 return (
-                                    <tr key={item.id}>
-                                        <td className="showsince992">{item.id}</td>
-                                        <td className="showsince">{new Date(item.date).toLocaleDateString()}</td>
-                                        <td>{item.sellerName}</td>
-                                        <td className="showsince992">{item.visited}</td>
-                                        <td className="showsince992">{item.deals}</td>
-                                        <td>{item.amount.toFixed(2)}</td>
+                                    <tr key={sale.id}>
+                                        <td className="showsince992">{sale.id}</td>
+                                        <td className="showsince">{new Date(sale.date).toLocaleDateString()}</td>
+                                        <td>{sale.sellerName}</td>
+                                        <td className="showsince992">{sale.visited}</td>
+                                        <td className="showsince992">{sale.deals}</td>
+                                        <td>{sale.amount.toFixed(2)}</td>
                                         <td>
                                             <div className="vendasmeta-red-btn-container">
                                                 <NotificationButton />
